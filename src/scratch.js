@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var REVEAL = 0.6;
+  var activeMouseUp = null;
 
   function buildModal(v) {
     var modal = document.getElementById('scratch-modal');
@@ -28,6 +29,10 @@
   function closeModal() {
     var modal = document.getElementById('scratch-modal');
     modal.hidden = true;
+    if (activeMouseUp) {
+      window.removeEventListener('mouseup', activeMouseUp);
+      activeMouseUp = null;
+    }
     modal.innerHTML = '';
   }
 
@@ -49,6 +54,7 @@
 
     var drawing = false;
     var revealed = false;
+    var lastCheck = 0;
 
     function pos(ev) {
       var rect = canvas.getBoundingClientRect();
@@ -73,17 +79,28 @@
       ctx.beginPath();
       ctx.arc(p.x, p.y, 18, 0, Math.PI * 2);
       ctx.fill();
+      var now = Date.now();
+      if (!revealed && now - lastCheck > 120) {
+        lastCheck = now;
+        if (scratchRevealReached(clearedCount(), canvas.width * canvas.height, REVEAL)) {
+          revealed = true;
+          canvas.classList.add('revealed');
+        }
+      }
+    }
+
+    function start(ev) { drawing = true; scratch(ev); }
+    function end() {
+      drawing = false;
       if (!revealed && scratchRevealReached(clearedCount(), canvas.width * canvas.height, REVEAL)) {
         revealed = true;
         canvas.classList.add('revealed');
       }
     }
 
-    function start(ev) { drawing = true; scratch(ev); }
-    function end() { drawing = false; }
-
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', scratch);
+    activeMouseUp = end;
     window.addEventListener('mouseup', end);
     canvas.addEventListener('touchstart', start, { passive: false });
     canvas.addEventListener('touchmove', scratch, { passive: false });
