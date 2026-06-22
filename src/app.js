@@ -147,6 +147,8 @@
 
   function logout() {
     sessionStorage.removeItem(SKEY);
+    $('in-class').value = '';
+    $('in-room').value = '';
     $('in-number').value = '';
     showLogin();
   }
@@ -156,6 +158,7 @@
     if (!raw) return false;
     try {
       var s = JSON.parse(raw);
+      lastQuery = s.query;
       renderDashboard(s.data, s.query);
       return true;
     } catch (e) { return false; }
