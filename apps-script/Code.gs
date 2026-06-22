@@ -9,16 +9,17 @@ function doGet(e) {
     room: (e && e.parameter && e.parameter.room) || '',
     number: (e && e.parameter && e.parameter.number) || '',
   };
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var data = {
-    roster: readSheet_(ss, 'Roster'),
-    submissions: readSheet_(ss, 'Submissions'),
-    exams: readSheet_(ss, 'Exams'),
-  };
   var payload;
   try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var data = {
+      roster: readSheet_(ss, 'Roster'),
+      submissions: readSheet_(ss, 'Submissions'),
+      exams: readSheet_(ss, 'Exams'),
+    };
     payload = buildResponse(data, q); // จาก portal-lib.js
   } catch (err) {
+    console.error(err);
     payload = { ok: false, error: 'server_error' };
   }
   return ContentService
