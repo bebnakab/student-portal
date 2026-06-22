@@ -43,6 +43,11 @@ test('examView formats announced score and unannounced', () => {
   assert.equal(ua.display, 'ยังไม่ประกาศคะแนน');
 });
 
+test('examView omits max from display when MAX cell is blank', () => {
+  assert.deepEqual(core.examView({ item: 'ส', score: 18, max: null }),
+    { item: 'ส', announced: true, score: 18, max: null, display: '18' });
+});
+
 test('scratchRevealReached uses 0.6 default and respects override', () => {
   assert.equal(core.scratchRevealReached(60, 100), true);
   assert.equal(core.scratchRevealReached(59, 100), false);

@@ -30,12 +30,20 @@ function submissionView(item) {
 
 function examView(item) {
   var announced = item.score !== null && item.score !== undefined;
+  var display;
+  if (!announced) {
+    display = 'ยังไม่ประกาศคะแนน';
+  } else if (item.max === null || item.max === undefined) {
+    display = String(item.score);
+  } else {
+    display = item.score + ' / ' + item.max;
+  }
   return {
     item: item.item,
     announced: announced,
     score: item.score,
     max: item.max,
-    display: announced ? (item.score + ' / ' + item.max) : 'ยังไม่ประกาศคะแนน',
+    display: display
   };
 }
 
