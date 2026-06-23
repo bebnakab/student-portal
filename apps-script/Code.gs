@@ -16,10 +16,12 @@ function doGet(e) {
     if (e && e.parameter && e.parameter.debug) {
       payload = debugInfo_(ss, q);
     } else {
+      // แท็บแยกตามชั้น เช่น "Roster_ม.6" — เติม suffix จากค่า class ที่ส่งมา
+      var suffix = q.class ? ('_' + String(q.class).trim()) : '';
       var data = {
-        roster: readSheet_(ss, 'Roster'),
-        submissions: readSheet_(ss, 'Submissions'),
-        exams: readSheet_(ss, 'Exams'),
+        roster: readSheetEither_(ss, 'Roster', suffix),
+        submissions: readSheetEither_(ss, 'Submissions', suffix),
+        exams: readSheetEither_(ss, 'Exams', suffix),
       };
       payload = buildResponse(data, q); // จาก portal-lib.js
     }
@@ -36,6 +38,14 @@ function readSheet_(ss, name) {
   var sh = ss.getSheetByName(name);
   if (!sh) return [];
   return sh.getDataRange().getValues();
+}
+
+// อ่านแท็บแบบ "<base><suffix>" ก่อน (เช่น Roster_ม.6) ถ้าไม่มีค่อย fallback เป็น "<base>"
+function readSheetEither_(ss, base, suffix) {
+  if (suffix && ss.getSheetByName(base + suffix)) {
+    return readSheet_(ss, base + suffix);
+  }
+  return readSheet_(ss, base);
 }
 
 // DEBUG helper: รายงานว่าผูกกับ Spreadsheet ไหน, มีแท็บอะไรบ้าง, แต่ละแท็บมีกี่แถว/คอลัมน์,
