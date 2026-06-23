@@ -8,6 +8,9 @@
   --primary: #2f6fed;
 }
 * { box-sizing: border-box; }
+/* `hidden` attribute must always win over class-level `display` rules
+   (e.g. .overlay/.modal use display:flex which would otherwise override it). */
+[hidden] { display: none !important; }
 body {
   margin: 0;
   font-family: "Segoe UI", "Sarabun", system-ui, sans-serif;
