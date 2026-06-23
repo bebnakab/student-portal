@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เช็คงาน &amp; คะแนนสอบ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- LOGIN VIEW -->
+    <section id="login-view" class="view">
+      <div class="card login-card">
+        <h1>เช็คงาน &amp; คะแนนสอบ</h1>
+        <label class="field">ชั้น
+          <select id="in-class"></select>
+        </label>
+        <label class="field">ห้อง
+          <select id="in-room"></select>
+        </label>
+        <label class="field">เลขที่
+          <input id="in-number" type="number" inputmode="numeric" min="1" placeholder="เช่น 12">
+        </label>
+        <button id="btn-login" type="button" class="btn-primary">เข้าดูข้อมูล</button>
+        <p id="login-error" class="error" hidden></p>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboard-view" class="view" hidden>
+      <header class="dash-header">
+        <div>
+          <div id="dash-name" class="dash-name"></div>
+          <div id="dash-meta" class="dash-meta"></div>
+        </div>
+        <button id="btn-logout" type="button" class="btn-ghost">ออก</button>
+      </header>
+
+      <h2 class="section-title">การส่งงาน</h2>
+      <ul id="submissions-list" class="sub-list"></ul>
+
+      <h2 class="section-title">คะแนนสอบ</h2>
+      <div id="exams-list" class="exam-grid"></div>
+    </section>
+
+    <!-- LOADING / ERROR OVERLAY -->
+    <div id="overlay" class="overlay" hidden>
+      <div class="overlay-box">
+        <p id="overlay-msg"></p>
+        <button id="overlay-retry" type="button" class="btn-primary" hidden>ลองใหม่</button>
+      </div>
+    </div>
+
+    <!-- SCRATCH MODAL CONTAINER (เติมโดย scratch.js) -->
+    <div id="scratch-modal" class="modal" hidden></div>
+
+  </div>
+
+  <script src="src/portal-core.js"></script>
+  <script src="config.js"></script>
+  <script src="src/scratch.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
