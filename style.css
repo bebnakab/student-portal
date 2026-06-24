@@ -112,20 +112,75 @@ h1 { font-size: 1.3rem; text-align: center; margin: 0 0 18px; }
 }
 .modal-backdrop { position: absolute; inset: 0; }
 
-.sc-title { margin: 0 0 14px; font-size: 1.05rem; }
+.sc-title { margin: 0 0 4px; font-size: 1.05rem; }
+.sc-subtitle {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic; font-size: .85rem; color: #8f7f58; margin-bottom: 14px;
+}
+/* โซนขูด "ทอง" — ส่วนเดียวที่เป็นธีมทอง/มืดในกล่องขาว */
 .sc-stage {
-  position: relative; width: 280px; height: 140px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: center;
+  position: relative; width: 100%; height: 200px; margin: 0 auto;
+  border-radius: 13px; overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #1d1433, #0e0a1f);
+  box-shadow: inset 0 0 0 1px rgba(245,197,66,.16);
 }
-.sc-score {
+.sc-reveal {
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.2rem; font-weight: 800; color: var(--primary);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
 }
+.sc-reveal .sc-score-label {
+  font-size: 11px; letter-spacing: 3px; color: #bfa86a; text-transform: uppercase;
+}
+.sc-reveal .sc-score {
+  font-family: "Chonburi", Georgia, serif; font-size: 72px; line-height: .95;
+  background: linear-gradient(180deg,#fff3cc,#f0c24e 52%,#c8902a);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 2px 12px rgba(240,194,78,.2);
+}
+.sc-reveal .sc-tag { font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+.sc-reveal .sc-tag.pass { color: #2e9e5b; }
+.sc-reveal .sc-tag.fail { color: #d94c4c; }
 .sc-canvas {
-  position: absolute; inset: 0; border-radius: 10px;
-  transition: opacity .4s; touch-action: none;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  cursor: grab; touch-action: none; transition: opacity .4s;
 }
 .sc-canvas.revealed { opacity: 0; pointer-events: none; }
+.sc-hint { margin-top: 13px; font-size: 11.5px; color: #889; }
 .sc-fallback { margin-top: 8px; }
 .sc-close { margin-top: 16px; }
+
+/* เอฟเฟกต์ฉลอง/ให้กำลังใจ — overlay เต็มจอ "ธีมมืด" ชั่วคราว (z สูงกว่า modal) */
+.sc-stage-fx {
+  position: fixed; inset: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: center;
+  animation: scFade .4s ease;
+}
+.sc-fx-card {
+  position: relative; z-index: 2; text-align: center;
+  padding: 34px 44px; border-radius: 24px;
+  background: rgba(14,10,26,.55); backdrop-filter: blur(12px);
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,.9);
+  animation: scPop .55s cubic-bezier(.2,.9,.3,1.2); max-width: 88vw;
+}
+.sc-fx-eyebrow {
+  font-size: 13px; letter-spacing: 6px; text-transform: uppercase;
+  animation: scFloat 3s ease-in-out infinite;
+}
+.sc-fx-title { font-family: "Chonburi", Georgia, serif; font-size: 40px; line-height: 1.1; margin: 10px 0 4px; }
+.sc-fx-sub { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 17px; color: #cdbf9a; margin-bottom: 16px; }
+.sc-fx-score {
+  font-family: "Chonburi", Georgia, serif; font-size: 84px; line-height: 1;
+  background: linear-gradient(180deg,#fff3cc,#f0c24e 52%,#c8902a);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.sc-fx-caption { font-size: 13px; letter-spacing: 2px; color: #9c8c66; margin-top: 2px; }
+.sc-fx-close {
+  margin-top: 22px; font-size: 14px; cursor: pointer;
+  padding: 11px 26px; border-radius: 999px;
+  background: transparent; color: #d9c890; border: 1px solid rgba(217,200,144,.4);
+}
+.sc-fx-close:hover { border-color: #d9c890; }
+
+@keyframes scPop { 0% { transform: scale(.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes scFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
