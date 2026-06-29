@@ -19,12 +19,28 @@ function findRow(rows, cls, room, number) {
   return null;
 }
 
+// เซลล์ในแท็บ Submissions อาจเป็นสถานะ ("ส่งแล้ว"/"ยังไม่ส่ง") หรือ "คะแนน" ที่ครูจดไว้เอง
+// ตัวเลข = ครูบันทึกคะแนนของชิ้นงานนั้น → ตีความว่า "ส่งแล้ว" และ "ซ่อนตัวเลขเสมอ"
+// (ไม่ใส่ค่าคะแนนลง payload เลย นักเรียนจึงไม่เห็นแม้แต่ใน network — คงไว้เป็นบันทึกฝั่งครู)
+function isNumericScore(v) {
+  var s = normStr(v);
+  if (s === '') return false;
+  return !isNaN(Number(s));
+}
+
+function normalizeSubmissionStatus(raw) {
+  var s = normStr(raw);
+  if (s === '') return 'ยังไม่ส่ง';
+  if (isNumericScore(s)) return 'ส่งแล้ว';
+  return s;
+}
+
 function buildSubmissions(headerRow, dataRow) {
   var out = [];
   for (var c = 3; c < headerRow.length; c++) {
     var item = normStr(headerRow[c]);
     if (!item) continue;
-    var status = normStr(dataRow ? dataRow[c] : '') || 'ยังไม่ส่ง';
+    var status = normalizeSubmissionStatus(dataRow ? dataRow[c] : '');
     out.push({ item: item, status: status });
   }
   return out;
@@ -80,6 +96,8 @@ if (typeof module !== 'undefined' && module.exports) {
     normStr: normStr,
     keyMatch: keyMatch,
     findRow: findRow,
+    isNumericScore: isNumericScore,
+    normalizeSubmissionStatus: normalizeSubmissionStatus,
     buildSubmissions: buildSubmissions,
     buildExams: buildExams,
     validateQuery: validateQuery,
