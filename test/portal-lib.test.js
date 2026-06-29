@@ -33,6 +33,25 @@ test('buildSubmissions defaults blank cells to ยังไม่ส่ง', () 
   ]);
 });
 
+test('buildSubmissions treats a recorded score as ส่งแล้ว and never leaks the number', () => {
+  const header = ['class', 'room', 'number', 'ใบงาน 1', 'ใบงาน 2', 'ใบงาน 3'];
+  const row = ['ม.5', '1', '1', '8', '0', '10.5'];
+  assert.deepEqual(lib.buildSubmissions(header, row), [
+    { item: 'ใบงาน 1', status: 'ส่งแล้ว' },
+    { item: 'ใบงาน 2', status: 'ส่งแล้ว' },
+    { item: 'ใบงาน 3', status: 'ส่งแล้ว' },
+  ]);
+});
+
+test('normalizeSubmissionStatus keeps text statuses, hides numbers, defaults blanks', () => {
+  assert.equal(lib.normalizeSubmissionStatus('ส่งแล้ว'), 'ส่งแล้ว');
+  assert.equal(lib.normalizeSubmissionStatus('ยังไม่ส่ง'), 'ยังไม่ส่ง');
+  assert.equal(lib.normalizeSubmissionStatus(''), 'ยังไม่ส่ง');
+  assert.equal(lib.normalizeSubmissionStatus('8'), 'ส่งแล้ว');
+  assert.equal(lib.normalizeSubmissionStatus(8), 'ส่งแล้ว');
+  assert.equal(lib.normalizeSubmissionStatus('ส่งช้า'), 'ส่งช้า');
+});
+
 test('buildSubmissions with null dataRow marks everything ยังไม่ส่ง', () => {
   const header = ['class', 'room', 'number', 'ใบงาน 1'];
   assert.deepEqual(lib.buildSubmissions(header, null), [
